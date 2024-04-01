@@ -339,10 +339,41 @@ class NeRFDataset:
         self.training = self.type in ['train', 'all', 'trainval']
         self.num_rays = self.opt.num_rays if self.training else -1
 
-        # load nerf-compatible format data.
+        # # load nerf-compatible format data.
       
-        with open(opt.pose, 'r') as f:
-            transform = json.load(f)
+        # with open(opt.pose, 'r') as f:
+        #     transform = json.load(f)
+
+               # load nerf-compatible format data.
+        
+        # load all splits (train/valid/test)
+        # =============================================================================
+        if type == 'all':
+            transform_paths = glob.glob(os.path.join(self.root_path, '*.json'))
+            transform = None
+            for transform_path in transform_paths:
+                with open(transform_path, 'r') as f:
+                    tmp_transform = json.load(f)
+                    if transform is None:
+                        transform = tmp_transform
+                    else:
+                        transform['frames'].extend(tmp_transform['frames'])
+        # load train and val split
+        elif type == 'trainval':
+            with open(os.path.join(self.root_path, f'transforms_train.json'), 'r') as f:
+                transform = json.load(f)
+            with open(os.path.join(self.root_path, f'transforms_val.json'), 'r') as f:
+                transform_val = json.load(f)
+            transform['frames'].extend(transform_val['frames'])
+        # only load one specified split
+        else:
+            # no test, use val as test
+            _split = 'val' if type == 'test' else type
+            with open(os.path.join(self.root_path, f'transforms_{_split}.json'), 'r') as f:
+                transform = json.load(f)
+
+        # =============================================================================
+
 
         # load image size
         if 'h' in transform and 'w' in transform:

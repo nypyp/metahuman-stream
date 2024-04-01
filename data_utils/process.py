@@ -42,12 +42,32 @@ def extract_semantics(ori_imgs_dir, parsing_dir):
     print(f'[INFO] ===== extracted semantics =====')
 
 
+# def extract_landmarks(ori_imgs_dir):
+
+#     print(f'[INFO] ===== extract face landmarks from {ori_imgs_dir} =====')
+
+#     import face_alignment
+#     fa = face_alignment.FaceAlignment(face_alignment.LandmarksType._2D, flip_input=False)
+#     image_paths = glob.glob(os.path.join(ori_imgs_dir, '*.jpg'))
+#     for image_path in tqdm.tqdm(image_paths):
+#         input = cv2.imread(image_path, cv2.IMREAD_UNCHANGED) # [H, W, 3]
+#         input = cv2.cvtColor(input, cv2.COLOR_BGR2RGB)
+#         preds = fa.get_landmarks(input)
+#         if len(preds) > 0:
+#             lands = preds[0].reshape(-1, 2)[:,:2]
+#             np.savetxt(image_path.replace('jpg', 'lms'), lands, '%f')
+#     del fa
+#     print(f'[INFO] ===== extracted face landmarks =====')
+#=========================ernerf 源代码=====================================================
 def extract_landmarks(ori_imgs_dir):
 
     print(f'[INFO] ===== extract face landmarks from {ori_imgs_dir} =====')
 
     import face_alignment
-    fa = face_alignment.FaceAlignment(face_alignment.LandmarksType._2D, flip_input=False)
+    try:
+        fa = face_alignment.FaceAlignment(face_alignment.LandmarksType._2D, flip_input=False)
+    except:
+        fa = face_alignment.FaceAlignment(face_alignment.LandmarksType.TWO_D, flip_input=False)
     image_paths = glob.glob(os.path.join(ori_imgs_dir, '*.jpg'))
     for image_path in tqdm.tqdm(image_paths):
         input = cv2.imread(image_path, cv2.IMREAD_UNCHANGED) # [H, W, 3]
@@ -58,7 +78,7 @@ def extract_landmarks(ori_imgs_dir):
             np.savetxt(image_path.replace('jpg', 'lms'), lands, '%f')
     del fa
     print(f'[INFO] ===== extracted face landmarks =====')
-
+#=======================================================================================
 
 def extract_background(base_dir, ori_imgs_dir):
     
