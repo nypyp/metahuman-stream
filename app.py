@@ -190,7 +190,7 @@ def chat_socket(ws):
         while True:
             message = ws.receive()           
             
-            if False:
+            if not message or len(message)==0:
                 return '输入信息为空'
             else:
                 print("get the message")
