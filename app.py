@@ -32,6 +32,18 @@ global nerfreal
 global tts_type
 global gspeaker
 
+class Postman:
+    def __init__(self):
+        self.humanchat_ws = None
+    
+    def set_humanchat_ws(self,ws):
+        self.humanchat_ws = ws
+    
+    def send_message_to_humanchat(self, message):
+        if self.humanchat_ws:
+            self.humanchat_ws.send(message)
+
+postmanVoice2page = Postman()
 
 async def main(voicename: str, text: str, render):
     communicate = edge_tts.Communicate(text, voicename)
@@ -125,10 +137,43 @@ def echo_socket(ws):
 def llm_response(message):
     from llm.LLM import LLM
     # llm = LLM().init_model('Gemini', model_path= 'gemini-pro',api_key='Your API Key', proxy_url=None)
-    llm = LLM().init_model('ChatGPT', model_path= 'gpt-3.5-turbo',api_key='Your API Key')
+    print("Init the LLM")
+    llm = LLM().init_model('ChatGPT', model_path= 'gpt-3.5-turbo',api_key='sk-E25QXBdbHT9cIh6f58D14f1e96F3441982546aBeBfA7C7D7')
+    print("get the LLM of:",type(llm))
+    print("tring to chat...")
     response = llm.chat(message)
     print(response)
     return response
+
+@sockets.route('/voicechat')
+def voicechat_socket(ws):
+    if not ws:
+        print('未建立连接！')
+        return 'Please use WebSocket'
+    # 否则，循环接收和发送消息
+    else:
+        print('chat建立连接！')
+        while True:
+            print("start to recerive:")
+            message = ws.receive()           
+            
+            try:
+                if message is None:
+                    print("chat Received a None message.")
+                elif len(message)==0:
+                    return '输入信息为空'
+                else:
+                    print("get the message:")
+                    postmanVoice2page.send_message_to_humanchat('0'+message)
+                    ws.send("Server received:" + message)
+                    message = message + '，用20字回答'
+                    res=llm_response(message) 
+                    postmanVoice2page.send_message_to_humanchat(res)
+                    print("get the res")                          
+                    txt_to_audio(res)
+                    
+            except TypeError as e:
+                print("Error:",e)
 
 @sockets.route('/humanchat')
 def chat_socket(ws):
@@ -141,13 +186,17 @@ def chat_socket(ws):
     # 否则，循环接收和发送消息
     else:
         print('建立连接！')
+        postmanVoice2page.set_humanchat_ws(ws)
         while True:
             message = ws.receive()           
             
-            if len(message)==0:
+            if False:
                 return '输入信息为空'
             else:
-                res=llm_response(message)                           
+                print("get the message")
+                res=llm_response(message)
+                ws.send(res)
+                print("get the res")                           
                 txt_to_audio(res)                        
 
 def render():

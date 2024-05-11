@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Chat Component</title>
+  <style>
+    .chat-container {
+      width: 400px;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .chat-bubble {
+      background-color: #f2f2f2;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+
+    .user-message {
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div id="chat-log"></div>
+    <input type="text" id="message-input" placeholder="Type your message">
+    <button id="send-button">Send</button>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    var ws = new WebSocket('ws://example.com');
+
+    ws.onopen = function() {
+      console.log('WebSocket connection established.');
+    };
+
+    ws.onmessage = function(event) {
+      var receivedMessage = event.data;
+      console.log('Received message: ' + receivedMessage);
+      addChatBubble(receivedMessage, false);
+    };
+
+    $('#send-button').on('click', function() {
+      var message = $('#message-input').val();
+      console.log('Sending: ' + message);
+      ws.send(message);
+      addChatBubble(message, true);
+      $('#message-input').val('');
+    });
+
+    function addChatBubble(message, isUser) {
+      var chatLog = $('#chat-log');
+      var chatBubble = $('<div>').addClass('chat-bubble');
+      if (isUser) {
+        chatBubble.addClass('user-message');
+      }
+      chatBubble.text(message);
+      chatLog.append(chatBubble);
+      chatLog.scrollTop(chatLog[0].scrollHeight);
+    }
+  </script>
+</body>
+</html>
