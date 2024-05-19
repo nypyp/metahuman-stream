@@ -16,3 +16,4 @@ pretrained
 *.mp4
 .DS_Store
 workspace/log_ngp.txt
+NVIDIA-Linux-x86_64-535.179.run
