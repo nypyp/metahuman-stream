@@ -6,6 +6,7 @@ build/
 
 tmp*
 trial*/
+ernerf
 
 data
 data_utils/face_tracking/3DMM/*
