@@ -31,3 +31,5 @@ edge_tts
 flask
 flask_sockets
 opencv-python-headless
+aiortc
+aiohttp_cors

@@ -10,7 +10,8 @@ import torch.nn.functional as F
 import cv2
 
 from asrreal import ASR
-from rtmp_streaming import StreamerConfig, Streamer
+import asyncio
+from av import AudioFrame, VideoFrame
 
 class NeRFReal:
     def __init__(self, opt, trainer, data_loader, debug=True):
@@ -56,9 +57,12 @@ class NeRFReal:
         self.ind_index = 0
         self.ind_num = trainer.model.individual_codes.shape[0]
 
+        self.customimg_index = 0
+
         # build asr
         if self.opt.asr:
             self.asr = ASR(opt)
+            self.asr.warm_up()
         
         '''
         video_path = 'video_stream'
@@ -108,6 +112,18 @@ class NeRFReal:
 
     def push_audio(self,chunk):
         self.asr.push_audio(chunk)   
+    
+    def before_push_audio(self):
+        self.asr.before_push_audio()
+
+    def mirror_index(self, index):
+        size = self.opt.customvideo_imgnum
+        turn = index // size
+        res = index % size
+        if turn % 2 == 0:
+            return res
+        else:
+            return size - res - 1   
 
     def prepare_buffer(self, outputs):
         if self.mode == 'image':
@@ -115,7 +131,7 @@ class NeRFReal:
         else:
             return np.expand_dims(outputs['depth'], -1).repeat(3, -1)
 
-    def test_step(self):
+    def test_step(self,loop=None,audio_track=None,video_track=None):
         
         #starter, ender = torch.cuda.Event(enable_timing=True), torch.cuda.Event(enable_timing=True)
         #starter.record()
@@ -131,28 +147,62 @@ class NeRFReal:
                 # use the live audio stream
                 data['auds'] = self.asr.get_next_feat()
 
+            audiotype = 0
+            if self.opt.transport=='rtmp':
+                for _ in range(2):
+                    frame,type = self.asr.get_audio_out()
+                    audiotype += type
+                    #print(f'[INFO] get_audio_out shape ',frame.shape)                
+                    self.streamer.stream_frame_audio(frame)
+            else:
+                for _ in range(2):
+                    frame,type = self.asr.get_audio_out()
+                    audiotype += type
+                    frame = (frame * 32767).astype(np.int16)
+                    new_frame = AudioFrame(format='s16', layout='mono', samples=frame.shape[0])
+                    new_frame.planes[0].update(frame.tobytes())
+                    new_frame.sample_rate=16000
+                    # if audio_track._queue.qsize()>10:
+                    #     time.sleep(0.1)
+                    asyncio.run_coroutine_threadsafe(audio_track._queue.put(new_frame), loop)  
             #t = time.time()
-            outputs = self.trainer.test_gui_with_data(data, self.W, self.H)
-            #print('-------ernerf time: ',time.time()-t)
-            #print(f'[INFO] outputs shape ',outputs['image'].shape)
-            image = (outputs['image'] * 255).astype(np.uint8)
-            if not self.opt.fullbody:
-                self.streamer.stream_frame(image)
-            else: #fullbody human
-                #print("frame index:",data['index'])
-                image_fullbody = cv2.imread(os.path.join(self.opt.fullbody_img, str(data['index'][0])+'.jpg'))
-                image_fullbody = cv2.cvtColor(image_fullbody, cv2.COLOR_BGR2RGB)
-                start_x = self.opt.fullbody_offset_x  # 合并后小图片的起始x坐标
-                start_y = self.opt.fullbody_offset_y  # 合并后小图片的起始y坐标
-                image_fullbody[start_y:start_y+image.shape[0], start_x:start_x+image.shape[1]] = image
-                self.streamer.stream_frame(image_fullbody)
-            #self.pipe.stdin.write(image.tostring())
-            for _ in range(2):
-                frame = self.asr.get_audio_out()
-                #print(f'[INFO] get_audio_out shape ',frame.shape)
-                self.streamer.stream_frame_audio(frame)
-            #     frame = (frame * 32767).astype(np.int16).tobytes()
-            #     self.fifo_audio.write(frame)           
+            if self.opt.customvideo and audiotype!=0:
+                self.loader = iter(self.data_loader) #init
+                imgindex  = self.mirror_index(self.customimg_index)
+                #print('custom img index:',imgindex)
+                image = cv2.imread(os.path.join(self.opt.customvideo_img, str(int(imgindex))+'.png'))
+                image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+                if self.opt.transport=='rtmp':
+                    self.streamer.stream_frame(image)
+                else:
+                    new_frame = VideoFrame.from_ndarray(image, format="rgb24")
+                    asyncio.run_coroutine_threadsafe(video_track._queue.put(new_frame), loop)
+                self.customimg_index += 1
+            else:
+                self.customimg_index = 0
+                outputs = self.trainer.test_gui_with_data(data, self.W, self.H)
+                #print('-------ernerf time: ',time.time()-t)
+                #print(f'[INFO] outputs shape ',outputs['image'].shape)
+                image = (outputs['image'] * 255).astype(np.uint8)
+                if not self.opt.fullbody:
+                    if self.opt.transport=='rtmp':
+                        self.streamer.stream_frame(image)
+                    else:
+                        new_frame = VideoFrame.from_ndarray(image, format="rgb24")
+                        asyncio.run_coroutine_threadsafe(video_track._queue.put(new_frame), loop)
+                else: #fullbody human
+                    #print("frame index:",data['index'])
+                    image_fullbody = cv2.imread(os.path.join(self.opt.fullbody_img, str(data['index'][0])+'.jpg'))
+                    image_fullbody = cv2.cvtColor(image_fullbody, cv2.COLOR_BGR2RGB)
+                    start_x = self.opt.fullbody_offset_x  # 合并后小图片的起始x坐标
+                    start_y = self.opt.fullbody_offset_y  # 合并后小图片的起始y坐标
+                    image_fullbody[start_y:start_y+image.shape[0], start_x:start_x+image.shape[1]] = image
+                    if self.opt.transport=='rtmp':
+                        self.streamer.stream_frame(image_fullbody)
+                    else:
+                        new_frame = VideoFrame.from_ndarray(image_fullbody, format="rgb24")
+                        asyncio.run_coroutine_threadsafe(video_track._queue.put(new_frame), loop)
+            #self.pipe.stdin.write(image.tostring())        
         else:
             if self.audio_features is not None:
                 auds = get_audio_features(self.audio_features, self.opt.att, self.audio_idx)
@@ -164,50 +214,55 @@ class NeRFReal:
         #torch.cuda.synchronize()
         #t = starter.elapsed_time(ender)
             
-    def render(self):
-        if self.opt.asr:
-             self.asr.warm_up()
+    def render(self,quit_event,loop=None,audio_track=None,video_track=None):
+        #if self.opt.asr:
+        #     self.asr.warm_up()
+        
+        if self.opt.transport=='rtmp':
+            from rtmp_streaming import StreamerConfig, Streamer
+            fps=25
+            #push_url='rtmp://localhost/live/livestream' #'data/video/output_0.mp4'
+            sc = StreamerConfig()
+            sc.source_width = self.W
+            sc.source_height = self.H
+            sc.stream_width = self.W
+            sc.stream_height = self.H
+            if self.opt.fullbody:
+                sc.source_width = self.opt.fullbody_width
+                sc.source_height = self.opt.fullbody_height
+                sc.stream_width = self.opt.fullbody_width
+                sc.stream_height = self.opt.fullbody_height
+            sc.stream_fps = fps
+            sc.stream_bitrate = 1000000
+            sc.stream_profile = 'baseline' #'high444' # 'main'
+            sc.audio_channel = 1
+            sc.sample_rate = 16000
+            sc.stream_server = self.opt.push_url
+            self.streamer = Streamer()
+            self.streamer.init(sc)
+            #self.streamer.enable_av_debug_log()
+
         count=0
         totaltime=0
-
-        fps=25
-        #push_url='rtmp://localhost/live/livestream' #'data/video/output_0.mp4'
-        sc = StreamerConfig()
-        sc.source_width = self.W
-        sc.source_height = self.H
-        sc.stream_width = self.W
-        sc.stream_height = self.H
-        if self.opt.fullbody:
-            sc.source_width = self.opt.fullbody_width
-            sc.source_height = self.opt.fullbody_height
-            sc.stream_width = self.opt.fullbody_width
-            sc.stream_height = self.opt.fullbody_height
-        sc.stream_fps = fps
-        sc.stream_bitrate = 1000000
-        sc.stream_profile = 'baseline' #'high444' # 'main'
-        sc.audio_channel = 1
-        sc.sample_rate = 16000
-        sc.stream_server = self.opt.push_url
-        self.streamer = Streamer()
-        self.streamer.init(sc)
-        #self.streamer.enable_av_debug_log()
-
-        while True: #todo
+        _starttime=time.perf_counter()
+        _totalframe=0
+        while not quit_event.is_set(): #todo
             # update texture every frame
             # audio stream thread...
-            t = time.time()
+            t = time.perf_counter()
             if self.opt.asr and self.playing:
                 # run 2 ASR steps (audio is at 50FPS, video is at 25FPS)
                 for _ in range(2):
                     self.asr.run_step()
-            self.test_step()
-            totaltime += (time.time() - t)
+            self.test_step(loop,audio_track,video_track)
+            totaltime += (time.perf_counter() - t)
             count += 1
+            _totalframe += 1
             if count==100:
-                print(f"------actual avg fps:{count/totaltime:.4f}")
+                print(f"------actual avg infer fps:{count/totaltime:.4f}")
                 count=0
                 totaltime=0
-            # delay = 0.04 - (time.time() - t) #40ms
-            # if delay > 0:
-            #     time.sleep(delay)
+            delay = _starttime+_totalframe*0.04-time.perf_counter() #40ms
+            if delay > 0:
+                time.sleep(delay)
             

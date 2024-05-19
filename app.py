@@ -1,5 +1,5 @@
 # server.py
-from flask import Flask, request, jsonify
+from flask import Flask, render_template,send_from_directory,request, jsonify
 from flask_sockets import Sockets
 import base64
 import time
@@ -10,13 +10,19 @@ from geventwebsocket.handler import WebSocketHandler
 import os
 import re
 import numpy as np
-from threading import Thread
+from threading import Thread,Event
 import multiprocessing
 
+from aiohttp import web
+import aiohttp
+import aiohttp_cors
+from aiortc import RTCPeerConnection, RTCSessionDescription
+from webrtc import HumanPlayer
+
 import argparse
-from nerf_triplane.provider import NeRFDataset_Test
-from nerf_triplane.utils import *
-from nerf_triplane.network import NeRFNetwork
+from ernerf.nerf_triplane.provider import NeRFDataset_Test
+from ernerf.nerf_triplane.utils import *
+from ernerf.nerf_triplane.network import NeRFNetwork
 from nerfreal import NeRFReal
 
 import shutil
@@ -49,7 +55,11 @@ async def main(voicename: str, text: str, render):
     communicate = edge_tts.Communicate(text, voicename)
 
     #with open(OUTPUT_FILE, "wb") as file:
+    first = True
     async for chunk in communicate.stream():
+        if first:
+            #render.before_push_audio()
+            first = False
         if chunk["type"] == "audio":
             render.push_audio(chunk["data"])
             #file.write(chunk["data"])
@@ -79,7 +89,7 @@ def xtts(text, speaker, language, server_url, stream_chunk_size) -> Iterator[byt
         return
 
     first = True
-    for chunk in res.iter_content(chunk_size=960):
+    for chunk in res.iter_content(chunk_size=960): #24K*20ms*2
         if first:
             end = time.perf_counter()
             print(f"xtts Time to first chunk: {end-start}s")
@@ -89,7 +99,39 @@ def xtts(text, speaker, language, server_url, stream_chunk_size) -> Iterator[byt
 
     print("xtts response.elapsed:", res.elapsed)
 
-def stream_xtts(audio_stream,render):
+def gpt_sovits(text, character, language, server_url, emotion) -> Iterator[bytes]:
+    start = time.perf_counter()
+    req={}
+    req["text"] = text
+    req["text_language"] = language
+    req["character"] = character
+    req["emotion"] = emotion
+    #req["stream_chunk_size"] = stream_chunk_size  # you can reduce it to get faster response, but degrade quality
+    req["stream"] = True
+    res = requests.post(
+        f"{server_url}/tts",
+        json=req,
+        stream=True,
+    )
+    end = time.perf_counter()
+    print(f"gpt_sovits Time to make POST: {end-start}s")
+
+    if res.status_code != 200:
+        print("Error:", res.text)
+        return
+        
+    first = True
+    for chunk in res.iter_content(chunk_size=32000): # 1280 32K*20ms*2
+        if first:
+            end = time.perf_counter()
+            print(f"gpt_sovits Time to first chunk: {end-start}s")
+            first = False
+        if chunk:
+            yield chunk
+
+    print("gpt_sovits response.elapsed:", res.elapsed)
+
+def stream_tts(audio_stream,render):
     for chunk in audio_stream:
         if chunk is not None:
             render.push_audio(chunk)
@@ -101,13 +143,24 @@ def txt_to_audio(text_):
         t = time.time()
         asyncio.get_event_loop().run_until_complete(main(voicename,text,nerfreal))
         print(f'-------edge tts time:{time.time()-t:.4f}s')
+    elif tts_type == "gpt-sovits": #gpt_sovits
+        stream_tts(
+            gpt_sovits(
+                text_,
+                app.config['CHARACTER'], #"test", #character
+                "zh", #en args.language,
+                app.config['TTS_SERVER'], #"http://127.0.0.1:5000", #args.server_url,
+                app.config['EMOTION'], #emotion 
+            ),
+            nerfreal
+        )
     else: #xtts
-        stream_xtts(
+        stream_tts(
             xtts(
                 text_,
                 gspeaker,
                 "zh-cn", #en args.language,
-                "http://localhost:9000", #args.server_url,
+                app.config['TTS_SERVER'], #"http://localhost:9000", #args.server_url,
                 "20" #args.stream_chunk_size
             ),
             nerfreal
@@ -137,10 +190,8 @@ def echo_socket(ws):
 def llm_response(message):
     from llm.LLM import LLM
     # llm = LLM().init_model('Gemini', model_path= 'gemini-pro',api_key='Your API Key', proxy_url=None)
-    print("Init the LLM")
-    llm = LLM().init_model('ChatGPT', model_path= 'gpt-3.5-turbo',api_key='sk-E25QXBdbHT9cIh6f58D14f1e96F3441982546aBeBfA7C7D7')
-    print("get the LLM of:",type(llm))
-    print("tring to chat...")
+    # llm = LLM().init_model('ChatGPT', model_path= 'gpt-3.5-turbo',api_key='Your API Key')
+    llm = LLM().init_model('VllmGPT', model_path= 'THUDM/chatglm3-6b')
     response = llm.chat(message)
     print(response)
     return response
@@ -199,8 +250,122 @@ def chat_socket(ws):
                 print("get the res")                           
                 txt_to_audio(res)                        
 
-def render():
-    nerfreal.render()                  
+#####webrtc###############################
+pcs = set()
+
+async def txt_to_audio_async(text_):
+    if tts_type == "edgetts":
+        voicename = "zh-CN-YunxiaNeural"
+        text = text_
+        t = time.time()
+        #asyncio.get_event_loop().run_until_complete(main(voicename,text,nerfreal))
+        await main(voicename,text,nerfreal)
+        print(f'-------edge tts time:{time.time()-t:.4f}s')
+    elif tts_type == "gpt-sovits": #gpt_sovits
+        stream_tts(
+            gpt_sovits(
+                text_,
+                app.config['CHARACTER'], #"test", #character
+                "zh", #en args.language,
+                app.config['TTS_SERVER'], #"http://127.0.0.1:5000", #args.server_url,
+                app.config['EMOTION'], #emotion 
+            ),
+            nerfreal
+        )
+    else: #xtts
+        stream_tts(
+            xtts(
+                text_,
+                gspeaker,
+                "zh-cn", #en args.language,
+                app.config['TTS_SERVER'], #"http://localhost:9000", #args.server_url,
+                "20" #args.stream_chunk_size
+            ),
+            nerfreal
+        )
+
+#@app.route('/offer', methods=['POST'])
+async def offer(request):
+    params = await request.json()
+    offer = RTCSessionDescription(sdp=params["sdp"], type=params["type"])
+
+    pc = RTCPeerConnection()
+    pcs.add(pc)
+
+    @pc.on("connectionstatechange")
+    async def on_connectionstatechange():
+        print("Connection state is %s" % pc.connectionState)
+        if pc.connectionState == "failed":
+            await pc.close()
+            pcs.discard(pc)
+
+    player = HumanPlayer(nerfreal)
+    audio_sender = pc.addTrack(player.audio)
+    video_sender = pc.addTrack(player.video)
+
+    await pc.setRemoteDescription(offer)
+
+    answer = await pc.createAnswer()
+    await pc.setLocalDescription(answer)
+
+    #return jsonify({"sdp": pc.localDescription.sdp, "type": pc.localDescription.type})
+
+    return web.Response(
+        content_type="application/json",
+        text=json.dumps(
+            {"sdp": pc.localDescription.sdp, "type": pc.localDescription.type}
+        ),
+    )
+
+async def human(request):
+    params = await request.json()
+
+    if params['type']=='echo':
+        await txt_to_audio_async(params['text'])
+    elif params['type']=='chat':
+        res=llm_response(params['text'])                           
+        await txt_to_audio_async(res)
+
+    return web.Response(
+        content_type="application/json",
+        text=json.dumps(
+            {"code": 0, "data":"ok"}
+        ),
+    )
+
+async def on_shutdown(app):
+    # close peer connections
+    coros = [pc.close() for pc in pcs]
+    await asyncio.gather(*coros)
+    pcs.clear()
+
+async def post(url,data):
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.post(url,data=data) as response:
+                return await response.text()
+    except aiohttp.ClientError as e:
+        print(f'Error: {e}')
+
+async def run(push_url):
+    pc = RTCPeerConnection()
+    pcs.add(pc)
+
+    @pc.on("connectionstatechange")
+    async def on_connectionstatechange():
+        print("Connection state is %s" % pc.connectionState)
+        if pc.connectionState == "failed":
+            await pc.close()
+            pcs.discard(pc)
+
+    player = HumanPlayer(nerfreal)
+    audio_sender = pc.addTrack(player.audio)
+    video_sender = pc.addTrack(player.video)
+
+    await pc.setLocalDescription(await pc.createOffer())
+    answer = await post(push_url,pc.localDescription.sdp)
+    await pc.setRemoteDescription(RTCSessionDescription(sdp=answer,type='answer'))
+##########################################                
                
 
 if __name__ == '__main__':
@@ -208,6 +373,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--pose', type=str, default="data/data_kf.json", help="transforms.json, pose source")
     parser.add_argument('--au', type=str, default="data/au.csv", help="eye blink area")
+    parser.add_argument('--torso_imgs', type=str, default="", help="torso images path")
 
     parser.add_argument('-O', action='store_true', help="equals --fp16 --cuda_ray --exp_eye")
 
@@ -296,17 +462,19 @@ if __name__ == '__main__':
     parser.add_argument('--asr_play', action='store_true', help="play out the audio")
 
     #parser.add_argument('--asr_model', type=str, default='deepspeech')
-    parser.add_argument('--asr_model', type=str, default='cpierse/wav2vec2-large-xlsr-53-esperanto') #facebook/hubert-large-ls960-ft
+    parser.add_argument('--asr_model', type=str, default='cpierse/wav2vec2-large-xlsr-53-esperanto') #
     # parser.add_argument('--asr_model', type=str, default='facebook/wav2vec2-large-960h-lv60-self')
+    # parser.add_argument('--asr_model', type=str, default='facebook/hubert-large-ls960-ft')
 
-    parser.add_argument('--push_url', type=str, default='rtmp://localhost/live/livestream')
+    parser.add_argument('--transport', type=str, default='rtcpush') #rtmp webrtc rtcpush
+    parser.add_argument('--push_url', type=str, default='http://localhost:1985/rtc/v1/whip/?app=live&stream=livestream') #rtmp://localhost/live/livestream
 
     parser.add_argument('--asr_save_feats', action='store_true')
     # audio FPS
     parser.add_argument('--fps', type=int, default=50)
     # sliding window left-middle-right length (unit: 20ms)
     parser.add_argument('-l', type=int, default=10)
-    parser.add_argument('-m', type=int, default=50)
+    parser.add_argument('-m', type=int, default=8)
     parser.add_argument('-r', type=int, default=10)
 
     parser.add_argument('--fullbody', action='store_true', help="fullbody human")
@@ -316,18 +484,26 @@ if __name__ == '__main__':
     parser.add_argument('--fullbody_offset_x', type=int, default=0)
     parser.add_argument('--fullbody_offset_y', type=int, default=0)
 
-    parser.add_argument('--tts', type=str, default='edgetts') #xtts
-    parser.add_argument('--ref_file', type=str, default=None)
-    parser.add_argument('--xtts_server', type=str, default='http://localhost:9000')
+    parser.add_argument('--customvideo', action='store_true', help="custom video")
+    parser.add_argument('--customvideo_img', type=str, default='data/customvideo/img')
+    parser.add_argument('--customvideo_imgnum', type=int, default=1)
+
+    parser.add_argument('--tts', type=str, default='edgetts') #xtts gpt-sovits
+    parser.add_argument('--REF_FILE', type=str, default=None)
+    parser.add_argument('--TTS_SERVER', type=str, default='http://localhost:9000') #http://127.0.0.1:5000
+    parser.add_argument('--CHARACTER', type=str, default='test')
+    parser.add_argument('--EMOTION', type=str, default='default')
+
+    parser.add_argument('--listenport', type=int, default=8010)
 
     opt = parser.parse_args()
     app.config.from_object(opt)
-    #print(app.config['xtts_server'])
+    print(app.config)
 
     tts_type = opt.tts
     if tts_type == "xtts":
         print("Computing the latents for a new reference...")
-        gspeaker = get_speaker(opt.ref_file, opt.xtts_server)
+        gspeaker = get_speaker(opt.REF_FILE, opt.TTS_SERVER)
 
     # assert test mode
     opt.test = True
@@ -345,7 +521,8 @@ if __name__ == '__main__':
     opt.exp_eye = True
     opt.smooth_eye = True
 
-    opt.torso = True
+    if opt.torso_imgs=='': #no img,use model output
+        opt.torso = True
 
     # assert opt.cuda_ray, "Only support CUDA ray mode."
     opt.asr = True
@@ -354,6 +531,7 @@ if __name__ == '__main__':
         # assert opt.patch_size > 16, "patch_size should > 16 to run LPIPS loss."
         assert opt.num_rays % (opt.patch_size ** 2) == 0, "patch_size ** 2 should be dividable by num_rays."
     seed_everything(opt.seed)
+    print(opt)
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     model = NeRFNetwork(opt)
@@ -370,12 +548,44 @@ if __name__ == '__main__':
     # we still need test_loader to provide audio features for testing.
     nerfreal = NeRFReal(opt, trainer, test_loader)
     #txt_to_audio('我是中国人,我来自北京')
-    rendthrd = Thread(target=render)
-    rendthrd.start()
+    if opt.transport=='rtmp':
+        thread_quit = Event()
+        rendthrd = Thread(target=nerfreal.render,args=(thread_quit,))
+        rendthrd.start()
 
     #############################################################################
-    print('start websocket server')
+    appasync = web.Application()
+    appasync.on_shutdown.append(on_shutdown)
+    appasync.router.add_post("/offer", offer)
+    appasync.router.add_post("/human", human)
+    appasync.router.add_static('/',path='web')
 
+    # Configure default CORS settings.
+    cors = aiohttp_cors.setup(appasync, defaults={
+            "*": aiohttp_cors.ResourceOptions(
+                allow_credentials=True,
+                expose_headers="*",
+                allow_headers="*",
+            )
+        })
+    # Configure CORS on all routes.
+    for route in list(appasync.router.routes()):
+        cors.add(route)
+
+    def run_server(runner):
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        loop.run_until_complete(runner.setup())
+        site = web.TCPSite(runner, '0.0.0.0', opt.listenport)
+        loop.run_until_complete(site.start())
+        if opt.transport=='rtcpush':
+            loop.run_until_complete(run(opt.push_url))
+        loop.run_forever()    
+    Thread(target=run_server, args=(web.AppRunner(appasync),)).start()
+
+    print('start websocket server')
+    #app.on_shutdown.append(on_shutdown)
+    #app.router.add_post("/offer", offer)
     server = pywsgi.WSGIServer(('0.0.0.0', 8000), app, handler_class=WebSocketHandler)
     server.serve_forever()
     
