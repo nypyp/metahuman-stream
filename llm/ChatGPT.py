@@ -1,9 +1,9 @@
 import openai
 
-openai.api_base = 'https://uiuiapi.com/v1'
+# openai.api_base = 'https://openai.com/v1'
 
 class ChatGPT():
-    def __init__(self, model_path = 'gpt-3.5-turbo', api_key = "sk-9xlLxBIZ06sVQE1rCaB9711fC7Df41Cf8b31F91d7f95609a"):
+    def __init__(self, model_path = 'gpt-3.5-turbo', api_key = "None"):
         openai.api_key = api_key
         self.model_path = model_path
 
@@ -18,5 +18,5 @@ class ChatGPT():
     
 if __name__ == "__main__":
     llm = ChatGPT()
-    response = llm.chat("玉旋你好？")
+    response = llm.chat("你好呀")
     print(response)
