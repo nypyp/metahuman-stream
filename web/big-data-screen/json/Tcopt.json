@@ -1,0 +1,35 @@
+{
+	"data":[
+		{
+			"name": "Wine",
+			"value": 275
+		},{
+			"name": "Diary",
+			"value": 275
+		},{
+			"name": "Medicine",
+			"value": 275
+		},{
+			"name": "Oil",
+			"value": 275
+		},{
+			"name": "Fruit",
+			"value": 210
+		},{
+			"name": "Vegitable",
+			"value": 280
+		},{
+			"name": "Fetilizer",
+			"value": 160
+		},{
+			"name": "Drink",
+			"value": 285
+		},{
+			"name": "Meat",
+			"value": 225
+		},{
+			"name": "Other",
+			"value": 275
+		}
+	]
+}

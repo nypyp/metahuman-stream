@@ -1,0 +1,52 @@
+assembly（组件）：
+    name：组件名                            [自定义组件名]
+    type：组件种类                          [beacon(指向标),image(图片),video(视频),text(文本)]
+    mode：模式                              [regular(固定模式),interactive(交互模式)]
+    position：定位
+        x：x坐标
+        y：y坐标
+        z：z坐标
+    rotate：旋转角度
+        x：x轴角度
+        y：y轴角度
+        z：z轴角度
+    size：大小
+        width：长度
+        height：高度
+    data：不同种类组件在不同模式下对应的数据
+
+
+data：
+    beacon-regular：
+        type：类型                                              [scene(场景),link(链接)]
+        url：在scene类型下值为场景名，link类型下为跳转链接
+        style：不同样式的指向标                                  [待定]
+        label：标签
+            show：是否显示                                      [true,false]
+            content：内容
+            style：样式                                         [待定]
+    image-regular：
+        url：图片链接
+    video-regular：
+        url：视频链接
+    text-regular：
+        content：内容
+        style：
+            color：字体颜色
+            ....
+    
+    beacon-interactive：
+        style：不同样式的指向标                                  [待定]
+        label：标签
+            show：是否显示                                      [true,false]
+            interactive：是否可交互                             [true,false]
+            content：可交互情况下值为空内容可编辑
+            style：样式                                         [待定]
+    image-interactive：
+        交互模式下可赋值链接
+    video-interactive：
+        交互模式下可赋值链接
+    text-interactive：
+        style：
+            color：字体颜色
+            ....

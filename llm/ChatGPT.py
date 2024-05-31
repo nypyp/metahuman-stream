@@ -1,9 +1,9 @@
 import openai
 
-# openai.api_base = 'https://openai.com/v1'
+openai.api_base = 'https://uiuiapi.com/v1'
 
 class ChatGPT():
-    def __init__(self, model_path = 'gpt-3.5-turbo', api_key = "None"):
+    def __init__(self, model_path = 'gpt-3.5-turbo', api_key = "sk-exxzrbiM1Wn7W8VNBbF84e131104443b87Dc38Cc7e9a5d19"):
         openai.api_key = api_key
         self.model_path = model_path
 

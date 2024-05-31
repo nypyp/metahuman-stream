@@ -190,7 +190,7 @@ def echo_socket(ws):
 def llm_response(message):
     from llm.LLM import LLM
     # llm = LLM().init_model('Gemini', model_path= 'gemini-pro',api_key='Your API Key', proxy_url=None)
-    llm = LLM().init_model('ChatGPT', model_path= 'gpt-3.5-turbo',api_key='sk-jAFLtNXmzJ5jBTL8398f5cB1Bd38427383C08bA2094d430a')
+    llm = LLM().init_model('ChatGPT', model_path= 'gpt-3.5-turbo',api_key='sk-exxzrbiM1Wn7W8VNBbF84e131104443b87Dc38Cc7e9a5d19')
     # llm = LLM().init_model('VllmGPT', model_path= 'THUDM/chatglm3-6b')
     response = llm.chat(message)
     print(response)

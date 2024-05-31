@@ -1,0 +1,590 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="Robots" content="all">
+    <meta name="Keywords"
+        content="胖,会,患,多囊卵巢综合征,科普,时间,脊柱,受损,影响,有,多大,了解,一下,第二,生命线,抓伤,咬伤,后,如何,预防,狂犬病,发生,关于,甲状腺疾病,你,了解,多少,关注,男性,健康,应从,孩童,时期,开始,为什么,早上,食欲,最差">
+    <meta name="Description"
+        content="胖,会,患,多囊卵巢综合征,科普,时间,脊柱,受损,影响,有,多大,了解,一下,第二,生命线,抓伤,咬伤,后,如何,预防,狂犬病,发生,关于,甲状腺疾病,你,了解,多少,关注,男性,健康,应从,孩童,时期,开始,为什么,早上,食欲,最差,晚上,总想,吃东西,用药,出现,不良反应,需要,立即,停药,应该,这样,做,如何,避免,久坐,血压,伤害,答案,看,这里,世界,高血压,日,警惕,地表,最强,入侵,害虫,正处,活跃,期,喝水,后有,4种,表现,肾脏,求救,疼痛,分,好坏,这,几种,疼,法">
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
+    <link rel="stylesheet" href="http://www.chealth.org.cn/js/jquery/autosuggest/autosuggest_inquisitor.css"
+        type="text/css">
+    <link rel="stylesheet" href="http://www.chealth.org.cn/js/poshytip-1.2/src/tip-darkgray/tip-darkgray.css"
+        type="text/css">
+    <link rel="stylesheet" href="http://www.chealth.org.cn/js/poshytip-1.2/src/tip-yellowsimple/tip-yellowsimple.css"
+        type="text/css">
+    <link href="http://www.chealth.org.cn/css/css.css" type="text/css" rel="stylesheet">
+    <link href="http://www.chealth.org.cn/css/page.css" rel="stylesheet" type="text/css">
+    <link href="http://www.chealth.org.cn/Scripts/jquery-ui/css/ui-lightness/jquery-ui-1.8.6.custom.css" type="text/css"
+        rel="stylesheet">
+    <link href="http://www.chealth.org.cn/Scripts/jquery.pagination/jquery.pagination.css" type="text/css"
+        rel="stylesheet">
+    <link href="http://www.chealth.org.cn/css/style.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="http://www.chealth.org.cn/css/css3.css">
+    <script src="http://www.chealth.org.cn/Scripts/jquery-1.4.2.min.js" type="text/javascript"></script>
+    <script src="http://www.chealth.org.cn/Scripts/jquery-ui/jquery-ui-1.8.6.custom.min.js"
+        type="text/javascript"></script>
+    <script src="http://www.chealth.org.cn/js/jquery-1.5.2.min.js"></script>
+    <script type="text/javascript"
+        src="http://www.chealth.org.cn/Scripts/jquery.pagination/jquery.pagination.js"></script>
+    <script type="text/javascript"
+        src="http://www.chealth.org.cn/js/jquery/autosuggest/bsn.AutoSuggest_2.1.3.js"></script>
+    <script type="text/javascript" src="http://www.chealth.org.cn/js/searchSuggest.js"></script>
+    <script type="text/javascript" src="http://www.chealth.org.cn/js/poshytip-1.2/src/jquery.poshytip.js"></script>
+    <script src="http://www.chealth.org.cn/Scripts/lanren.js" type="text/javascript"></script>
+    <title>健康快讯网</title>
+    <script type="text/javascript">
+        /*********pagebar**********/
+        $(document).ready(function () {
+            var _jqueryPageData = Number($("#jquery_page_data").val());
+            var _jqueryCurrentpage = Number($("#jquery_current_page").val());
+            if (_jqueryCurrentpage <= 0) {
+                _jqueryCurrentpage = 1;
+            }
+            var percount = 6;
+            var vstr = "";
+            if (_jqueryCurrentpage != 1) {
+                vstr += '<a style="cursor:pointer;" onclick="loadpage(1)">首页</a>';
+            } else {
+                vstr += '<span class="current">首页</span>';
+            }
+            if (_jqueryCurrentpage > 1) {
+                vstr += '<a style="cursor:pointer;" onclick="pre()">上一页</a>';
+            } else {
+                vstr += '<span class="current">上一页</span>';
+            }
+            if (_jqueryCurrentpage - percount <= 0) {
+                for (var i = 1; (i < _jqueryCurrentpage) && (_jqueryCurrentpage - 1 > 0); i++) {
+                    vstr += '<a style="font-size:14px;cursor:pointer;" onclick="loadpage(' + i + ')">' + i + '</a>';
+                }
+            } else {
+                for (var i = (_jqueryCurrentpage - percount); (i < _jqueryCurrentpage) && (_jqueryCurrentpage - 1 > 0); i++) {
+                    vstr += '<a style="font-size:14px;cursor:pointer;" onclick="loadpage(' + i + ')">' + i + '</a>';
+                }
+            }
+            vstr += '<span class="current"> ' + _jqueryCurrentpage + ' </span>';
+
+            if (_jqueryCurrentpage + percount <= _jqueryPageData) {
+                for (var i = (_jqueryCurrentpage + 1); i <= _jqueryCurrentpage + percount; i++) {
+                    vstr += '<a style="font-size:14px;cursor:pointer;" onclick="loadpage(' + i + ')">' + i + '</a>';
+                }
+            } else {
+                for (var i = (_jqueryCurrentpage + 1); i <= _jqueryPageData; i++) {
+                    vstr += '<a style="font-size:14px;cursor:pointer;" onclick="loadpage(' + i + ')">' + i + '</a>';
+                }
+            }
+            if (_jqueryCurrentpage < _jqueryPageData) {
+                vstr += '<a style="cursor:pointer;" onclick="next()">下一页</a>';
+            } else {
+                vstr += '<span class="current">下一页</span>';
+            }
+            if (_jqueryCurrentpage != _jqueryPageData) {
+                vstr += '<a style="cursor:pointer;" onclick="loadpage(' + _jqueryPageData + ')">尾页</a>';
+            } else {
+                vstr += '<span class="current">尾页</span>';
+            }
+            $("#pagebar").empty().html(vstr);
+        });
+        function pre() {
+            var _jqueryCurrentpage = Number($("#jquery_current_page").val());
+            if (_jqueryCurrentpage - 1 > 0) {
+                loadpage(_jqueryCurrentpage - 1);
+            }
+        }
+        function next() {
+            var _jqueryPageData = Number($("#jquery_page_data").val());
+            var _jqueryCurrentpage = Number($("#jquery_current_page").val());
+            if (_jqueryCurrentpage + 1 <= _jqueryPageData) {
+                loadpage(_jqueryCurrentpage + 1);
+            }
+        }
+        function loadpage(page_index) {
+            /*window.open("healthNews_index"+page_index+".html");*/
+            window.location.href = "healthNews_index" + page_index + ".html";
+        }
+    </script>
+</head>
+
+<body><input id="jquery_page_data" name="jquery_page_data" type="hidden" value="4"><input id="jquery_current_page"
+        name="jquery_current_page" type="hidden" value="1">
+    <script type="text/javascript">
+        //导航跳转
+        function jump(link, word) {
+            window.open(link + encodeURI(encodeURI(word)));
+        }
+        function jump(link) {
+            window.location.href = link;
+        }
+        //二级导航跳转
+        function jump(link, firstWord, secWord) {
+            window.open(link + encodeURI(encodeURI(firstWord)) + '&recordSecName=' + encodeURI(encodeURI(secWord)));
+        }
+        //导航跳转
+        function jump(link, firWord, secWord, thirdWord) {
+            window.open(link + encodeURI(encodeURI(firWord)) + '&recordSecName=' + encodeURI(encodeURI(secWord)) + '&recordThirdName=' + encodeURI(encodeURI(thirdWord)));
+        }
+        function selectSubmit() {
+            var word = document.getElementById("searchText").value;
+            if (word == "") {
+                alert("对不起，检索词不能为空!");
+                return;
+            } else if (word.length > 25) {
+                alert("请输入简短的检索词!");
+                return;
+            }
+            document.getElementById("searchForm").submit();
+        }
+        function search() {
+            if (event.keyCode == 13) { event.keyCode = 9; selectSubmit(); }
+        }
+    </script>
+    <!-- <div id="header">
+        <div class="logo"><a href="http://www.chealth.org.cn"><img src="http://www.chealth.org.cn/images/logo1.jpg"
+                    width="300" height="82"></a></div>
+        <div class="search_bar">
+            <form name="searchForm" id="searchForm" action="http://www.chealth.org.cn/search/search.jsp">
+                <div class="searchinupt"><input name="searchText" id="searchText" type="text"
+                        placeholder="请输入疾病名、医院名或医生名" class="search_input" onkeydown="search();"></div>
+                <div class="search_btn"><input type="button" value="搜  索" class="btn" onclick="selectSubmit();"></div>
+            </form>
+        </div>
+        <div id="hotWords" class="hot_search"><a href="javascript:void(0);" onclick="searchHot(this);"
+                class="hot">高血压</a><a href="javascript:void(0);" onclick="searchHot(this);">鼻炎</a><a
+                href="javascript:void(0);" onclick="searchHot(this);" class="hot">协和医院</a><a href="javascript:void(0);"
+                onclick="searchHot(this);">肺肿瘤</a><a href="javascript:void(0);" onclick="searchHot(this);">罗红霉素</a><a
+                href="javascript:void(0);" onclick="searchHot(this);">儿研所</a><a href="javascript:void(0);"
+                onclick="searchHot(this);">胃炎</a><a href="javascript:void(0);" onclick="searchHot(this);">湿疹</a><a
+                href="javascript:void(0);" onclick="searchHot(this);">咳嗽</a><a href="javascript:void(0);"
+                onclick="searchHot(this);">便秘</a></div>
+    </div> -->
+    <!-- <div id="menu">
+        <ul>
+            <li><a href="http://www.chealth.org.cn/">首页</a></li>
+            <li class="current"><a
+                    href="http://www.chealth.org.cn/mon/healthNews/article/healthNews_index1.html">健康快讯</a></li>
+            <li><a href="http://www.chealth.org.cn/healthyliving/HealthyLiving.html">健康生活</a></li>
+            <li><a href="http://www.chealth.org.cn/mon/cma/article/cmaList.html">常见病防治</a></li>
+            <li><a href="http://www.chealth.org.cn/mon/experts/article/expert_index1.html">科普专家</a></li>
+            <li><a href="http://www.chealth.org.cn/mon/activity/article/activity_index1.html">科普活动</a></li>
+            <li><a href="http://www.chealth.org.cn/mon/video/article/MO162000001.html">科普视频</a></li>
+            <li><a href="http://www.chealth.org.cn/guide/Guide.html">求医问药</a></li>
+            <li><a href="http://www.chealth.org.cn/mon/scientificbooksList/article/MK167_01_1.html">科普图书</a></li>
+            <li><a href="http://js.chealth.org.cn/">知识竞赛</a></li>
+            <li><a href="http://www.chealth.org.cn/mon/bulletin/article/bulletin_index1.html">世卫组织简报</a></li>
+        </ul>
+    </div> -->
+    <div class="main">
+        <div class="address"><b><a href="http://www.chealth.org.cn/">主页</a></b>&nbsp;>&nbsp;
+            <a href="http://www.chealth.org.cn/news/HealthAction.jsp">健康资讯</a>&nbsp;>&nbsp;<span>更多</span></div>
+        <div class="main_top"></div>
+        <div class="main_box">
+            <div id="ContentContainer" style="margin-left: 25px;">
+                <div id="HealthNews"><span class="rss"></span>
+                    <div id="HealthNewsPic">
+                        <table width="950px" height="260px" border="0" align="center" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td width="390" height="195">
+                                    <div class="Hr_1"><input type="hidden" id="num" value="6">
+                                        <div class="Hr_12"><a class="act" id="a0" onmouseover="clearAuto();"
+                                                onclick="Mea(0);" onmouseout="setAuto()"
+                                                target="_self">你了解血常规中的这些常规指标吗？</a><a class="nor" id="a1"
+                                                onmouseover="clearAuto();" onclick="Mea(1);" onmouseout="setAuto()"
+                                                target="_self">核酸检测费用不一致，170与260...</a><a class="nor" id="a2"
+                                                onmouseover="clearAuto();" onclick="Mea(2);" onmouseout="setAuto()"
+                                                target="_self">北京市属医院7万余人核酸检测全部阴...</a><a class="nor" id="a3"
+                                                onmouseover="clearAuto();" onclick="Mea(3);" onmouseout="setAuto()"
+                                                target="_self">北京健康宝升级，出现红色或弹窗状态...</a><a class="nor" id="a4"
+                                                onmouseover="clearAuto();" onclick="Mea(4);" onmouseout="setAuto()"
+                                                target="_self">今年诺贝尔奖说的EPO是个啥？可改...</a><a class="nor" id="a5"
+                                                onmouseover="clearAuto();" onclick="Mea(5);" onmouseout="setAuto()"
+                                                target="_self">水是世界上最便宜的药</a></div>
+                                        <div class="HPLeft" id="pc_0" style="display: block;overflow: hidden; "><a
+                                                href="http://www.chealth.org.cn/mon/healthNews/article/MD174009037.html"
+                                                target="_blank"><img height="220" width="287"
+                                                    src="http://www.chealth.org.cn/photos/healthNews/e0469a6b-f46a-4303-bfb8-d8319fb7b348.jpg"
+                                                    alt="健康快讯"></a>
+                                            <h3><a href="http://www.chealth.org.cn/mon/healthNews/article/MD174009037.html"
+                                                    target="_blank">你了解血常规中的这些常规指标吗？</a></h3>
+                                            <p><a href="http://www.chealth.org.cn/mon/healthNews/article/MD174009037.html"
+                                                    target="_blank">据日本《东京新闻》29日报道，一项调查显示，日本东京都府中市和国分寺市部分居民血液中的有害物质含量，超出了日本全国的平均值。报道指出，这一情况可能是因附近一座美军基地排污所致。该基地在7年间共向外排放3000多升消防泡沫，这些泡沫中含有的化学物质在人体内堆积，很可能诱发癌变。
+                                                    关于人体的血液，它流遍我们的全身，能输送营养、排出废物，还暗藏着身体健康与否的&ldquo;密码&rdquo;。东京部分居民血液中致癌物质超标提醒我们，我们必须要学着了解血常规检测中一些重要的指标，这才是被证明和确认的某些疾病的信号。
+                                                    那么，血液里有哪些重要健康指标呢？
+                                                    血常规检测中一些重要的指标，这才是被证明和确认的某些疾病的信号。
+                                                    红细胞计数（RBC）
+                                                    红细胞反映了身体的造血情况，一般来说，红细胞增多多见于慢性肺心病、某些先天性心脏病等；红细胞减少多见于贫血或恶性肿瘤。其中，小孩常见缺铁性贫血，应首先考虑膳食是否平衡；老人若贫血需排查恶性肿瘤的可能。不过，依人群和地区差异，红细胞基准数量也会有所不同。新生儿红细胞计数较高，部分老年人则偏低，孕妇因妊娠影响会出现红细胞生理性减少。生活在高原地区的人，通常红细胞计数高于生活在海拔较低地区的人。
+                                                    &nbsp;
+                                                    白细胞计数（WBC）
+                                                    中性粒细胞是白细胞的一种，如果感冒发烧时中性粒细胞增多，意味着可能存在细菌感染，需进行抗生素治疗；如果中性粒细胞减少，且淋巴细胞比例增加，多为病毒性感染，需要进行抗病毒治疗。
+                                                    &nbsp;
+                                                    血小板（PLT）
+                                                    血小板在血液中十分稳定，若发生变化，可能意味着出现血液疾病，比如粒细胞白血病、再生障碍性贫血等。
+                                                    &nbsp;
+                                                    甲胎蛋白（AFP）
+                                                    如异常升高，可能提示肝脏疾病。肝癌患者中，67%~74%会出现甲胎蛋白升高。病毒性肝炎、肝硬化等也会导致这一问题。因此，遇到该指标变化，最好先到肝病相关科室进一步检查。值得提醒的是，妊娠后3个月也可能出现甲胎蛋白升高，分娩后3周可恢复正常，不用过于担心。
+                                                    &nbsp;
+                                                    癌胚抗原（CEA）
+                                                    其对结肠癌、直肠癌、乳腺癌、胃癌、胰腺癌等多种恶性肿瘤都很敏感，但需要做进一步影像学检查。临床中，常用作判断肿瘤治疗效果的指标。
+                                                    &nbsp;
+                                                    前列腺特异性抗原（PSA）
+                                                    若其升高，应首先到泌尿外科就诊，筛查是否患有前列腺癌，中老年男性尤要注意。不过，前列腺肥大、前列腺炎等也会造成前列腺特异性抗原升高。无论是哪种血检指标，是否患病或需要进一步检查都需要遵医嘱，不可自作主张，更不能讳疾忌医。
+                                                    &nbsp;
+                                                    平时，则应通过以下方式，维护血液的健康：
+                                                    多喝水有助&ldquo;排毒&rdquo;，加速血液中尿素氮等有害物质的排出；控制脂肪摄入，暴饮暴食、大鱼大肉可能导致血脂偏高，增加心脑血管疾病的风险，蔬菜、水果、牛奶、豆类、水产品等则能提高血液活力；远离化学毒物，比如引起高铁血红蛋白血症的硝基化合物，诱发溶血性贫血的砷化氢，影响造血功能的苯、放射性物质等；谨慎用药，用药前最好咨询专业医生或药师，不凭感觉自行服药。</a>
+                                            </p>
+                                        </div>
+                                        <div class="HPLeft" id="pc_1" style="display: none;overflow: hidden;"><a
+                                                href="http://www.chealth.org.cn/mon/healthNews/article/MD174008939.html"
+                                                target="_blank"><img height="220" width="287"
+                                                    src="http://www.chealth.org.cn/photos/healthNews/4c79c44d-812b-4912-a1ab-cc88c515a29a.jpg"
+                                                    alt="健康快讯"></a>
+                                            <h3><a href="http://www.chealth.org.cn/mon/healthNews/article/MD174008939.html"
+                                                    target="_blank">核酸检测费用不一致，170与260...</a></h3>
+                                            <p><a href="http://www.chealth.org.cn/mon/healthNews/article/MD174008939.html"
+                                                    target="_blank">自北京新发地疫情发生以来，截至6月23日，北京重点地区、重点人群已经累计进行核酸检测234.2万人，作为老百姓最关心的除了检测结果，就是检测费用的问题了。
+                                                    家住大兴区富强西里的王先生，17日接到居委会电话通知，按照居委会时间地点要求，18日上午到指定检测点（由北京优迅医学实验室有限公司检测）进行了新冠肺炎的核酸检测，费用260元。
+                                                    &ldquo;我后来问了问小区同样检测的人，有的人花了170元，还有的比我稍微晚一点时间做检测的居民还给免费了。都是同一个小区居民，我不知道为什么这费用会有差别呢？&rdquo;
+                                                    记者在北京市医保局官网检索到《关于保障新型冠状病毒核酸检测相关事宜的通知》显示新冠肺炎核酸检测项目价格为180元，该价格为最高指导价格，不得上浮，下浮幅度不限。通知要求，相关部门将综合考虑检验技术发展进步和相关成本变化等因素，对项目价格进行动态调整。各有关医疗机构应当严格按照规定向患者提供服务并收取费用，规范自身价格行为，及时做好信息系统更新维护和价格公示等相关工作。这个价格从5月19日起执行。
+                                                    对于多收取的80元是什么费用呢？健康时报记者于6月26日上午致电北京优迅医学实验室有限公司新冠肺炎检测预约电话咨询原因，但电话一直无人接听。而该公司的小程序显示，如果申请退款，退款形式也仅限于已经预约但未做检测的人员。
+                                                    而同一小区之后有人免费做核酸检测，记者致电富强西里居委会，居委会的工作人员表示，这个事已经收到很多群众反映了，现在正在等待上级通知看如何妥善处理好，请大家耐心等待，肯定会给大家一个说法。
+                                                    而对于哪些人可以免费做，哪些人需要自费做，政府是有明确要求的，主要看是不是&ldquo;应检尽检&rdquo;人员。
+                                                    北京市医保局给出明确回应：国家和本市规定的&ldquo;应检尽检&rdquo;人群新型冠状病毒核酸检测费用由医保基金和财政共同负担，财政负担实行分级保障。其他北京市参保人员自愿检测的，按照自愿自费原则，检测费由个人负担。
+                                                    6月20日，北京新冠肺炎疫情防控工作领导小组检疫检测工作组副组长、市委组织部副部长张强在北京市新冠肺炎疫情防控工作新闻发布会上介绍，对新发地等涉疫市场、涉疫社区相关人员、本市中高风险街道乡镇常住居民、本市医疗卫生机构从业人员、公共领域服务人员、已返校学生及教职员工、参与重点区域社区防控一线工作人员等6类&ldquo;应检尽检&rdquo;人群开展核酸检测。
+                                                    目前，王先生还在等待居委会的答复。</a></p>
+                                        </div>
+                                        <div class="HPLeft" id="pc_2" style="display: none;overflow: hidden;"><a
+                                                href="http://www.chealth.org.cn/mon/healthNews/article/MD174008941.html"
+                                                target="_blank"><img height="220" width="287"
+                                                    src="http://www.chealth.org.cn/photos/healthNews/c376f914-6b84-42e7-b2e8-82930e31ec44.jpg"
+                                                    alt="健康快讯"></a>
+                                            <h3><a href="http://www.chealth.org.cn/mon/healthNews/article/MD174008941.html"
+                                                    target="_blank">北京市属医院7万余人核酸检测全部阴...</a></h3>
+                                            <p><a href="http://www.chealth.org.cn/mon/healthNews/article/MD174008941.html"
+                                                    target="_blank">为加强北京市属医院新冠肺炎疫情防控工作，近日，北京市医院管理中心严格落实医疗卫生机构从业人员&ldquo;应检尽检&rdquo;要求，组织市属医院对编内外职工、进修人员、劳务外包人员、学生等全部在岗人员，进行了核酸检测。
+                                                    截至目前，除因小区封闭居家隔离、援派等原因无法参加检测的1514人外，所有市属医院人员已全部完成核酸检测。共检测72277人，检测结果全部为阴性。
+                                                    下一步，北京市医院管理中心将督导各市属医院建立核酸检测台账，进一步加强对从业人员疫情防控情况的动态管理。</a></p>
+                                        </div>
+                                        <div class="HPLeft" id="pc_3" style="display: none;overflow: hidden;"><a
+                                                href="http://www.chealth.org.cn/mon/healthNews/article/MD174008940.html"
+                                                target="_blank"><img height="220" width="287"
+                                                    src="http://www.chealth.org.cn/photos/healthNews/fad422af-48bf-409d-b418-a1abe80b96f3.jpg"
+                                                    alt="健康快讯"></a>
+                                            <h3><a href="http://www.chealth.org.cn/mon/healthNews/article/MD174008940.html"
+                                                    target="_blank">北京健康宝升级，出现红色或弹窗状态...</a></h3>
+                                            <p><a href="http://www.chealth.org.cn/mon/healthNews/article/MD174008940.html"
+                                                    target="_blank">6月25日16时，北京市政府新闻办召开疫情防控第132场新闻发布会。6月24日0时至24时，北京市新增新冠肺炎确诊病例13例，其中男性5例，女性8例；平均年龄42岁，最小18岁，最大60岁；按居住地划分，丰台区9例、大兴区4例。
+                                                    北京市经济和信息化局副局长潘锋介绍，&ldquo;北京健康宝&rdquo;进行了3.0升级，健康宝始终坚持&ldquo;信息最小化采集，前台极简化设计，后台多部门联动，隐私高安全保障&rdquo;的理念，从没有采集过个人位置信息，而是通过后台多源数据比对分析，赋予大家相应状态。
+                                                    截至目前，累计2900万人使用健康宝查询了3.6亿次健康状态。扫码功能上线以来，全市已累计生成约34万个登记簿二维码，约500万人次通过扫码实现电子登记。
+                                                    潘锋介绍，如果您的健康宝变成红色&ldquo;集中观察&rdquo;状态，说明您属于本次疫情发生以来，我市卫健部门掌握的确诊、疑似、密接或无症状感染人员，请您按照要求履行集中观察义务。如有问题，请联系市疾控中心。
+                                                    如果您的健康宝变成黄色&ldquo;居家观察&rdquo;状态，说明经过社区摸排，您到访过新发地等相关场所，社区已将您纳入居家观察管理，请遵照社区管理要求。如有问题，请联系自己所在社区。
+                                                    如果您的健康宝显示弹窗状态，一种情况是，您近期有过进出京行为，请您点击页面上的&ldquo;继续&rdquo;，即可跳转国家平台进行行程核验。另一种情况是，您近期可能有过进出中高风险地区的行为，例如新发地，请立即与所在社区或相关单位联系报道，以便正确履行防疫义务。
+                                                    健康宝还做了以下几点改善：
+                                                    一、16岁以下青少年，不强制进行人脸识别，结果页直接显示照片及相关状态，并于照片底端标注&ldquo;未成年人照片未经人脸识别&rdquo;。
+                                                    二、完善照片更换方式，大家只需在结果页长按照片区域3秒，即可重新拍照。
+                                                    三、优化国家平台行程核验界面。同时，新版本在顶部和底部分别增加了通知栏及留言栏，方便大家沟通互动。
+                                                    近期，部分公园、银行、超市等地基于健康宝的&ldquo;他人代查&rdquo;功能，推出了人性化的代查服务，解决了部分老人的使用问题。另外，本次升级后有极少数用户反映了健康宝页面显示不全的问题，可通过升级微信版本解决。</a>
+                                            </p>
+                                        </div>
+                                        <div class="HPLeft" id="pc_4" style="display: none;overflow: hidden;"><a
+                                                href="http://www.chealth.org.cn/mon/healthNews/article/MD174008891.html"
+                                                target="_blank"><img height="220" width="287"
+                                                    src="http://www.chealth.org.cn/photos/healthNews/9a35a252-7b8e-4031-8c3e-53feaaa1e7e2.png"
+                                                    alt="健康快讯"></a>
+                                            <h3><a href="http://www.chealth.org.cn/mon/healthNews/article/MD174008891.html"
+                                                    target="_blank">今年诺贝尔奖说的EPO是个啥？可改...</a></h3>
+                                            <p><a href="http://www.chealth.org.cn/mon/healthNews/article/MD174008891.html"
+                                                    target="_blank">北京时间10月7日，瑞典卡罗琳斯卡医学院在斯德哥尔摩宣布，将2019年诺贝尔生理学或医学奖授予Kaelin，Ratcliffe，Semenza，因为他们发现了细胞在分子水平上感受氧气的基本机制。我们的细胞缺氧时会发生的一个关键生理反应是促红细胞生成素(EPO)水平的升高，而他们本项工作的意义则是发现了细胞中EPO在不同氧气水平下的调节原理。细胞中缺氧诱导因子-1α（HIF-1α）可根据含氧量调节EPO基因活性，适应低氧水平的新陈代谢等生理反应。
+                                                    EPO有什么用？
+                                                    剧烈运动时，我们肌肉中的氧气感应控制适应性过程可利用EPO产生更多新生血管和红细胞，它也与免疫系统和许多其他生理功能有关。EPO也是许多疾病的核心，例如，EPO
+                                                    主要由肾脏细胞产生，因此慢性肾衰竭患者通常会因EPO表达减少而患有严重贫血，外源EPO也作为贫血的常用药物之一。
+                                                    此外，EPO的氧气调节机制在癌症中具有重要研发前景。在肿瘤中，氧气调节机制被用来刺激血管形成和重塑新陈代谢，以有效地促进癌细胞的增殖。各大学术实验室和制药公司正在进行大量针对能够通过激活或阻断氧传感机制的研究，用于开发干扰不同疾病状态的药物。
+                                                    EPO为何被滥用？
+                                                    可见，EPO对维持我们正常的生理功能至关重要，但其促进红细胞生成的特性也容易被过度使用，比如兴奋剂。如果运动员体内红细胞数量多，那么肌肉供氧能力增强，可减缓肌肉疲劳，减少锻炼之间的恢复时间，增加肌肉力量，并在比赛中保持优势。
+                                                    自20世纪90年代初以来，EPO就被世界反兴奋剂机构(WADA)禁止使用，但是第一批检测直到2000年夏季奥运会才开始施行。2006年环法自行车赛冠军Floyd
+                                                    Landis在兴奋剂检测呈阳性后被剥夺冠军头衔时，EPO滥用成为世界头条新闻。其中，最有名的EPO使用者是七次环法自行车赛冠军Lance
+                                                    Armstrong，在公开承认使用EPO后，Armstrong被剥夺了所有自行车冠军头衔。
+                                                    在我国，在2016年一年拿下27块半程马拉松业余比赛金牌，有着&ldquo;半马女神&rdquo;、&ldquo;颜值女王&rdquo;之称的业余跑者李文杰被查出EPO阳性，而被称为马拉松&ldquo;上海业余一哥&rdquo;的李一鹏同样因EPO违规受到处罚。
+                                                    滥用EPO有哪些危害？
+                                                    体内自然合成的EPO含量可受到氧气调节机制，但外源注射的EPO可造成其含量过高，带来重大健康隐患。2003年有8名自行车运动员的死亡与心脑血管有直接原因，人们怀疑这与他们注射EPO有关。EPO对健康风险远远超过任何可能的好处，如果作为一名运动成绩不佳，请不要让这种补充剂作为改善成绩的方法。
+                                                    美国Verywell网站发文指出，EPO可造成血液红细胞过多挤压血浆，导致血压过高；同时，过高的血液黏度会增加心脏的压力。红细胞过高易产生血栓，增加心脏病发作和中风的风险。
+                                                    EPO与一些治疗低血压的药物之间可发生药物相互作用，比如氢化可的松、米多君等，可增强其效果导致药物性高血压。
+                                                    另一方面，EPO如果与用于治疗白血病、淋巴瘤和乳腺癌的癌症药物一起使用，比如环磷酰胺可导致严重的肺部毒性。
+                                                    因此，专业运动员需定期接受测试以检测是否存在EPO，被检测为EPO阳性的运动员可能面临停赛、取消比赛头衔，甚至终身禁止参加体育活动。一方面是为了他们的生命健康，另一方面也能够防止更多的运动员滥用EPO。
+                                                    敬重科学但请不要滥用概念
+                                                    诺贝尔奖背后的一个个研究成果，改变着我们的认知和生活，更见证了人类改变世界、改变自身生存和生活状况的努力探索，值得我们敬重。但有意思的是，每年的诺贝尔奖吸引世界范围内无数科学工作者和爱好者的同时，也容易被各类保健品营销商重点炒作。2016年获奖的&ldquo;细胞自噬原理&rdquo;被转化为可&ldquo;逆转细胞老化，返老还童&rdquo;产品，而2017年发布的&ldquo;人体有生物钟，要按时睡觉&rdquo;则是改善睡眠产品最好的宣传词。今年&ldquo;细胞缺氧&rdquo;的概念想必可以催生不少新的养生保健产品。
+                                                    从上文可以看出，细胞供氧状态受到体内氧气感受机制调控，除剧烈运动或疾病状态均可维持在正常水平。医用可改善细胞供氧状态的EPO使用过多可导致生命安全风险，不应随意使用。同时这是一种注射剂，不会&ldquo;无意使用&rdquo;；而在将来的一段时间，我们可见2019年&ldquo;诺奖最新转化&rdquo;，可改善&ldquo;细胞缺氧&rdquo;的保健品应运而生。&mdash;&mdash;希望更多的人能够提高警惕，敬重科学，拒绝接受这些滥用诺奖的概念产品。
+                                                    参考资料：
+                                                    1.nobelprize.org
+                                                    Press release: The Nobel Prize in Physiology or Medicine 2019
+                                                    https://www.nobelprize.org/prizes/medicine/2019/press-release/
+                                                    2.verywellfit
+                                                    Erythropoietin (EPO) and Blood Doping in Sports
+                                                    https://www.verywellfit.com/epo-and-blood-doping-in-sports-3120522</a>
+                                            </p>
+                                        </div>
+                                        <div class="HPLeft" id="pc_5" style="display: none;overflow: hidden;"><a
+                                                href="http://www.chealth.org.cn/mon/healthNews/article/MD174005857.html"
+                                                target="_blank"><img height="220" width="287"
+                                                    src="http://www.chealth.org.cn/photos/healthNews/07038b39-d37f-47a5-9024-e70152540b47.png"
+                                                    alt="健康快讯"></a>
+                                            <h3><a href="http://www.chealth.org.cn/mon/healthNews/article/MD174005857.html"
+                                                    target="_blank">水是世界上最便宜的药</a></h3>
+                                            <p><a href="http://www.chealth.org.cn/mon/healthNews/article/MD174005857.html"
+                                                    target="_blank">1.防色斑：早起喝杯温开水
+                                                    人体经过一夜的新陈代谢，体内的垃圾需要有一个外力作用帮助排泄，温白开就是第一选择。
+                                                    刷牙后喝杯白开水可以迅速起到冲刷机体、养颜排毒的作用，防止色斑的产生。脸部已经有色斑的女性更是不应该放过清晨喝水排毒的机会。
+                                                    2.防便秘：大口喝水
+                                                    郑州市第三人民医院肛肠科医生高宪平解释，便秘是因为粪便在大肠内停留时间过长，其所含水分被大量吸收，使大便变得难以排出。
+                                                    要排便通畅，就要使肠腔内有充足能使大便软化的水分，因此，喝水应该讲究技巧：如果小口小口地喝水，水流速度慢，水很容易在胃里被吸收，产生小便。可见，便秘的人喝水最好是大口大口地喝(即喝满口)，吞咽动作快一些，这样，水能够尽快地到达结肠，同时刺激肠蠕动，改善便秘的症状。
+                                                    3.防尿路结石：3个黄金时段要喝水分别是：早上10点、下午4点、晚上10点。
+                                                    人体最缺水，此时尿液会过分浓缩，易于形成结石。在此时喝水，补水防结石事半功倍。另外还要保证每日饮水量要在3000~3500ml，饮水要分多次，并在全天中平均分配。
+                                                    4.防中风：睡前及半夜各饮一杯开水
+                                                    缺血性脑梗塞所致的中风占急性脑血管病的半数以上，尤以老年人为多，且常发生于夜间。由于动脉粥样硬化，管腔狭窄，血流减慢，血液变稠，极易发生缺血性脑梗塞。
+                                                    要注意睡前喝水别过量，睡前喝大量水，会增加起夜次数影响睡眠。
+                                                    5.防高血糖：每天至少4杯水
+                                                    《糖尿病护理》杂志刊登法国一项研究称，每天喝水4杯(227克/杯)，可以使高血糖或糖尿病危险降低36%。
+                                                    因为喝水充足，可以使大脑向肝脏发出&ldquo;产生更多葡萄糖&rdquo;的指令。而每天喝水不足2杯则会增加该病危险。
+                                                    6.想减肥：饭前喝水
+                                                    英国伯明翰大学一项研究发现，只要在每餐饭前半小时，坚持喝一杯500毫升的水，坚持3个月，体重就能减轻2公斤-4公斤。
+                                                    7.防胃酸&mdash;&mdash;喝点苏打水
+                                                    如果感觉胃酸，可以喝苏打水试试，初次喝可能感觉味道接受不了，可将果汁兑在苏打水里饮用。连续饮用几天，胃酸导致的不适可得到缓解，胃里感觉很舒服。
+                                                    8.防烦躁：一有空就喝水
+                                                    大脑制造出来的内啡肽被称为&ldquo;快乐荷尔蒙&rdquo;，而肾上腺素通常被称为&ldquo;痛苦荷尔蒙&rdquo;。当一个人痛苦烦躁时，肾上腺素就会飙升，但它如同其他毒物一样也可以排出体外，方法之一就是多喝水，一有空就喝水。
+                                                    &nbsp;
+                                                    &nbsp;</a></p>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div id="HotTopicsBottom"><b>&nbsp;健康快讯 </b>
+                    <div class="LiDotted">
+                        <ul class="Date">
+                            <li><span>2024-05-24</span><a
+                                    href="http://www.chealth.org.cn/mon/healthNews/article/MD174010040.html" onclick=""
+                                    target="_blank">不胖也会患多囊卵巢综合征 | 科普时间</a></li>
+                            <li><span>2024-05-24</span><a
+                                    href="http://www.chealth.org.cn/mon/healthNews/article/MD174010037.html" onclick=""
+                                    target="_blank">脊柱受损影响有多大？了解一下&ldquo;第二生命线&rdquo;</a></li>
+                            <li><span>2024-05-24</span><a
+                                    href="http://www.chealth.org.cn/mon/healthNews/article/MD174010038.html" onclick=""
+                                    target="_blank">被抓伤或咬伤后，如何预防狂犬病发生？</a></li>
+                            <li><span>2024-05-24</span><a
+                                    href="http://www.chealth.org.cn/mon/healthNews/article/MD174010039.html" onclick=""
+                                    target="_blank">关于甲状腺疾病 你了解多少</a></li>
+                            <li><span>2024-05-21</span><a
+                                    href="http://www.chealth.org.cn/mon/healthNews/article/MD174010034.html" onclick=""
+                                    target="_blank">关注男性健康 应从孩童时期开始</a></li>
+                            <li><span>2024-05-21</span><a
+                                    href="http://www.chealth.org.cn/mon/healthNews/article/MD174010036.html" onclick=""
+                                    target="_blank">为什么早上食欲最差，晚上却总想吃东西？</a></li>
+                            <li><span>2024-05-21</span><a
+                                    href="http://www.chealth.org.cn/mon/healthNews/article/MD174010033.html" onclick=""
+                                    target="_blank">用药出现不良反应，需要立即停药吗？应该这样做&rarr;</a></li>
+                            <li><span>2024-05-21</span><a
+                                    href="http://www.chealth.org.cn/mon/healthNews/article/MD174010035.html" onclick=""
+                                    target="_blank">如何避免久坐对血压的伤害？答案看这里&rarr;｜世界高血压日</a></li>
+                            <li><span>2024-05-11</span><a
+                                    href="http://www.chealth.org.cn/mon/healthNews/article/MD174010030.html" onclick=""
+                                    target="_blank">警惕！&ldquo;地表最强入侵害虫&rdquo;正处活跃期</a></li>
+                            <li><span>2024-05-11</span><a
+                                    href="http://www.chealth.org.cn/mon/healthNews/article/MD174010032.html" onclick=""
+                                    target="_blank">喝水后有4种表现，是「肾脏」在求救</a></li>
+                            <li><span>2024-05-11</span><a
+                                    href="http://www.chealth.org.cn/mon/healthNews/article/MD174010031.html" onclick=""
+                                    target="_blank">疼痛也分好坏？这几种疼法需要立即就医！</a></li>
+                            <li><span>2024-05-11</span><a
+                                    href="http://www.chealth.org.cn/mon/healthNews/article/MD174010029.html" onclick=""
+                                    target="_blank">预防肠道传染病健康提示</a></li>
+                            <li><span>2024-04-30</span><a
+                                    href="http://www.chealth.org.cn/mon/healthNews/article/MD174010025.html" onclick=""
+                                    target="_blank">一到夏天手上就长出的&ldquo;小水泡&rdquo;到底是什么？了解清楚才能避免发作</a></li>
+                            <li><span>2024-04-30</span><a
+                                    href="http://www.chealth.org.cn/mon/healthNews/article/MD174010028.html" onclick=""
+                                    target="_blank">为啥你喝一口咖啡就睡不着，他喝多少都没事？</a></li>
+                            <li><span>2024-04-30</span><a
+                                    href="http://www.chealth.org.cn/mon/healthNews/article/MD174010024.html" onclick=""
+                                    target="_blank">按摩后，这里竟长出个&ldquo;小苹果&rdquo;！医生提醒：这个部位很危险&rarr;</a></li>
+                            <li><span>2024-04-30</span><a
+                                    href="http://www.chealth.org.cn/mon/healthNews/article/MD174010027.html" onclick=""
+                                    target="_blank">儿童需要接种的疫苗有哪些？</a></li>
+                            <li><span>2024-04-30</span><a
+                                    href="http://www.chealth.org.cn/mon/healthNews/article/MD174010026.html" onclick=""
+                                    target="_blank">登革热会不会人传人？如何判断是否得了登革热</a></li>
+                            <li><span>2024-04-19</span><a
+                                    href="http://www.chealth.org.cn/mon/healthNews/article/MD174010023.html" onclick=""
+                                    target="_blank">应对抗癌副反应，支持治疗是关键</a></li>
+                            <li><span>2024-04-19</span><a
+                                    href="http://www.chealth.org.cn/mon/healthNews/article/MD174010022.html" onclick=""
+                                    target="_blank">了解药物性肝损伤，守护肝脏健康</a></li>
+                            <li><span>2024-04-19</span><a
+                                    href="http://www.chealth.org.cn/mon/healthNews/article/MD174010021.html" onclick=""
+                                    target="_blank">抗癌治疗后，记得别与医生失联</a></li>
+                        </ul>
+                    </div>
+                    <div id="pagebar" class="yahoo2" align="center"></div>
+                </div>
+            </div>
+            <div class="main_bottom"></div>
+        </div>
+    </div>
+    <footer>
+        <div class="container-fluid">
+          <div class="row align-items-center justify-content-lg-between">
+            <div class="col-lg-6 mb-lg-0 mb-4">
+              <div class="copyright text-center text-sm text-muted text-lg-start">
+                © <script>
+                  document.write(new Date().getFullYear())
+                </script>,
+                made with <i class="fa fa-heart"></i> by
+                <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">OUYANG & PAN</a>
+                for a better web.
+              </div>
+            </div>
+            </div>
+        </div>
+      </footer>
+    <!-- <div class="footer">
+        <div class="clear_D">
+            <p class="clear_p"><span id="demo-async-flickr"><a
+                        href="http://www.chealth.org.cn/include/website_description.html">网站简介</a><a
+                        href="http://www.chealth.org.cn/include/website_map.html">网站地图</a><a
+                        href="http://www.chealth.org.cn/include/privacy_policy.html">隐私政策</a><a
+                        href="http://www.chealth.org.cn/include/experts.html">专家团队</a><a rel="toLoadPartners"
+                        href="#">合作伙伴</a><a rel="toLoadBlogrolls" href="#">友情链接</a><a
+                        href="javascript:addFavorite();">收藏本站</a><a
+                        href="http://www.chealth.org.cn/include/contactUs.html" id="clear_p_wu">联系我们</a><a
+                        href="http://www.chealth.org.cn/include/website_feedback.html">意见反馈</a></span></p>
+        </div> -->
+       <!--  <div class="clear_bott">
+            <div>
+                合作伙伴： <a href="http://www.cast.org.cn/">中国科学技术协会</a><a href="http://www.cma.org.cn/">中华医学会</a><a
+                    href="http://www.cpma.org.cn/">中华预防医学会</a><a href="http://www.cpa.org.cn/Index.html">中国药学会</a><a
+                    href="http://www.cacm.org.cn/">中华中医药学会</a><a href="http://www.chs.org.cn/">中国社区卫生协会</a><a
+                    href="http://www.cnsoc.org/cn/">中国营养学会</a><a href="http://www.imicams.ac.cn">中国心理卫生协会</a><a
+                    href="http://www.csss.cn/cn/">中国体育科学协会</a></div>
+            <div>
+                本站由 <a href="http://www.imicams.ac.cn">中国医学科学院医学信息研究所</a>创办并维护
+                未经许可禁止转载或建立镜像
+            </div>
+            <div>
+                Copyright <span style="font-family: arial; font-size: 18px;">&copy;</span>
+                CHealth All Rights Reserved
+                <span><a target="_blank"
+                        href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010502037785"
+                        style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img
+                            src="http://www.chealth.org.cn/images/gaba.png" style="float:left; "><span
+                            style="float:left;margin: 0px 0px 0px 5px; color:#939393;">京公网安备
+                            11010502037785号</span></a></span>
+            </div>
+        </div>
+        <table align="center">
+            <tr>
+                <td>
+                    <div class="di_cent_words">
+                        <p><a href="https://www.healthonnet.org/HONcode/Chinese/?HONConduct247927"
+                                onclick="window.open(this.href); return false;"><img
+                                    src="https://www.honcode.ch/HONcode/Seal/HONConduct247927_s.gif"
+                                    style="border:0px; width: 49px; height: 72px; float: left; margin: 2px;"
+                                    title="我们遵循健康网络基金会的 医学和健康网站的行为准则" alt="我们遵循健康网络基金会的 医学和健康网站的行为准则"></a>我们遵循健康网络基金会的<a
+                                href="http://www.healthonnet.org/HONcode/Chinese/"
+                                onclick="window.open(this.href); return false;">医学和健康网站的行为准则</a>. <br />　　<a
+                                href="https://www.healthonnet.org/HONcode/Chinese/?HONConduct247927"
+                                onclick="window.open(this.href); return false;">点击这里核实</a></p>
+                        <form method="get" action="http://services.hon.ch/cgi-bin/HONcode/search"
+                            onclick="target='_blank'">
+                            <p>Search only trustworthy HONcode health websites:<br />　　<input type="hidden" name="Word"
+                                    value="And"><input type="hidden" name="SourceSE" value="HONConduct247927"><input
+                                    type="text" name="SEARCH" size="20"><input type="submit" value="Search"></p>
+                        </form>
+                    </div>
+                </td>
+                <td>
+                    <div class="di_cent_words">
+                        <p>
+                            <font size="2" color="#000099">中国公众健康网</font>
+                        </p>
+                        <p>
+                            <font size="2" color="#0099ff">http://www.chealth.org.cn/</font>
+                        </p>
+                        <p>
+                            <font size="2">Your personal HONcode ID number is: </font>
+                            <font size="2" color="#ff0000">HONConduct247927</font>
+                        </p>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="di_cent_img"><img src="http://www.chealth.org.cn/images/v2.0/anquanA.jpg"></div>
+                    <div class="di_cent_words">
+                        <ul>
+                            <li>本网站通过<a
+                                    href="http://v.anquan.org/authenticate/cert/?site=www.chealth.org.cn&at=official">安全联盟
+                                </a>认证</li>
+                            <li>网站资质齐全，服务内容符合规范，技术能力可靠，无信息泄露和木马病毒等安全风险</li>
+                        </ul>
+                    </div>
+                </td>
+                <td>
+                    <div class="di_cent_img"><img src="http://www.chealth.org.cn/images/v2.0/baiduA.jpg"></div>
+                    <div class="di_cent_words">
+                        <ul>
+                            <li>本网站已被<a
+                                    href="http://www.baidu.com/s?wd=www.chealth.org.cn@v&vmp_ec=1402483978&vmp_ectm=010adda409e8d2d58cd4aff4c33348e36LdZs=HR9m3Va253X09=fjb5ybgdy8a3o9Gdhe9b6c3JjdXy19f34343e1321c9d">百度信誉档案收录
+                                </a>收录</li>
+                            <li>档案编号：BDV-TFRA13728435</li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div style="display: none;">
+            <div id="blogrollsDiv" class="flickr-thumbs"><a href="http://www.imicams.ac.cn/" target="_blank"><img
+                        src="http://www.chealth.org.cn/images/blogroll/imicams.jpg"></a><a
+                    href="http://www.sinomed.ac.cn/" target="_blank"><img
+                        src="http://www.chealth.org.cn/images/blogroll/sinomed.jpg"></a><a href="http://www.39.net/"
+                    target="_blank"><img src="http://www.chealth.org.cn/images/blogroll/39jk.jpg"></a><a
+                    href="http://www.haodf.com/" target="_blank"><img
+                        src="http://www.chealth.org.cn/images/blogroll/hdfzx.jpg"></a><a href="http://www.baikemy.com/"
+                    target="_blank"><img src="http://www.chealth.org.cn/images/blogroll/bkmy.jpg"></a><a
+                    href="http://www.cmt.com.cn/" target="_blank"><img
+                        src="http://www.chealth.org.cn/images/blogroll/yxltw.jpg"></a><a
+                    href="http://www.cn-healthcare.com/" target="_blank"><img
+                        src="http://www.chealth.org.cn/images/blogroll/jkj.jpg"></a><a href="http://health.sohu.com/"
+                    target="_blank"><img src="http://www.chealth.org.cn/images/blogroll/shjk.jpg"></a><a
+                    href="http://health.qq.com/" target="_blank"><img
+                        src="http://www.chealth.org.cn/images/blogroll/txjk.jpg"></a><a
+                    href="http://health.sina.com.cn/" target="_blank"><img
+                        src="http://www.chealth.org.cn/images/blogroll/xljk.jpg"></a></div>
+            <div id="partnersDiv" class="flickr-thumbs"><a href="http://www.cast.org.cn/" target="_blank"><img
+                        src="http://www.chealth.org.cn/images/partner/cast.jpg"></a><a href="http://www.cdstm.cn/"
+                    target="_blank"><img src="http://www.chealth.org.cn/images/partner/cdstm.jpg"></a><a
+                    href="http://www.cma.org.cn/" target="_blank"><img
+                        src="http://www.chealth.org.cn/images/partner/cma.jpg"></a><a href="http://www.cpma.org.cn/"
+                    target="_blank"><img src="http://www.chealth.org.cn/images/partner/cpma.jpg"></a><a
+                    href="http://www.cpa.org.cn/Index.html" target="_blank"><img
+                        src="http://www.chealth.org.cn/images/partner/cpa.jpg"></a><a
+                    href="http://www.cacm.org.cn/coboportal/portal/zhzyyxhw.page" target="_blank"><img
+                        src="http://www.chealth.org.cn/images/partner/cacm.jpg"></a><a href="http://www.chs.org.cn/"
+                    target="_blank"><img src="http://www.chealth.org.cn/images/partner/chs.jpg"></a><a
+                    href="http://www.cnsoc.org/cn/" target="_blank"><img
+                        src="http://www.chealth.org.cn/images/partner/cnsoc.jpg"></a><a
+                    href="http://www.camh.org.cn/CN/index.html" target="_blank"><img
+                        src="http://www.chealth.org.cn/images/partner/camh.jpg"></a><a href="http://www.csss.cn/cn/"
+                    target="_blank"><img src="http://www.chealth.org.cn/images/partner/csss.jpg"></a></div>
+        </div> -->
+    </div>
+    <script src="http://www.chealth.org.cn/js/common.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+        document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F36fd539b021b9587019a963ad6275a4b' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+</body>
+
+</html>

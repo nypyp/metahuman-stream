@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>Ghana FDA Big Date Platform</title>
+		<link rel="stylesheet" href="./fda-3.css">
+		<link rel="stylesheet" href="../font/iconfont.css">
+	</head>
+	<body>
+		<header>
+			<div id="left" class="title-left">
+				<div id="setTime">
+					<div style="padding: 5px;">
+						<h1>15:26:18</h1>
+					</div>
+					<div style="padding: 8px 5px;">
+						<p>12/21/2021</p>
+						<p>Friday</p>
+					</div>
+				</div>
+				<div style="height: 100%;">
+					<h3 id="address" class="iconfont">&#xe606;&nbsp;ALL</h3>
+				</div>
+			</div>
+			<div id="middle">
+				<h1 class="ne-col-default">Ghana FDA Big Date Platform</h1>
+			</div>
+			<div id="right"></div>
+		</header>
+		<div id="box">
+			<div id="left">
+				<div class="chartBox ml-10 media-mr10" id="mapcharts">
+					<div class="title">Number of enterprises</div>
+					<div id="GHmap" style="height: 90%;"></div>
+				</div>
+				<div class="chartBox ml-10 mt-10 media-mr10">
+					<div class="title">Enterprise type statistics</div>
+					<div id="Ets" style="height: 90%;"></div>
+				</div>
+			</div>
+			<div id="middle">
+				<div class="chartBox ml-10 mr-10 media-mt10">
+					<div class="title">Total composition of product types</div>
+					<div id="Tcopt" style="height: 90%;"></div>
+				</div>
+				<div class="chartBox ml-10 mr-10 mt-10">
+					<div class="title">Product classification proportion</div>
+					<div id="Pcp" style="height: 90%;"></div>
+				</div>
+			</div>
+			<div id="right">
+				<div class="chartBox mr-10 media-ml10 media-mt10">
+					<div class="title">QR code scanning times</div>
+					<div id="Qcst" style="height: 90%;"></div>
+				</div>
+				<div class="chartBox mr-10 mt-10 media-ml10 media-mb10">
+					<div class="title">Customer complaints</div>
+					<div id="Cc" style="height: 90%;"></div>
+				</div>
+			</div>
+		</div>
+		
+		<script src="../public/jquery-2.1.0.js"></script>
+		<script src="../public/echarts.min.js"></script>
+		<script src="./fda-3.js"></script>
+	</body>
+</html>
