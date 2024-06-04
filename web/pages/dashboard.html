@@ -915,55 +915,59 @@
   <script src="../srs.sdk.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js"></script>
-    <script>
-        // MQTT 服务器连接参数
-        var MQTT_HOST = "192.168.1.124";
-        var MQTT_PORT = 1884;
-        var MQTT_TOPIC = "facial_expression";
+  <script>
+    // MQTT 服务器连接参数
+    var MQTT_HOST = "192.168.1.124";
+    var MQTT_PORT = 1884;
+    var MQTT_TOPIC = "facial_expression";
 
-        // MQTT 客户端
-        var client;
+    // MQTT 客户端
+    var client;
 
-        // 当 MQTT 客户端连接成功时的回调函数
-        function onConnect() {
-            console.log("Connected to MQTT broker");
-            client.subscribe(MQTT_TOPIC);
+    // 当 MQTT 客户端连接成功时的回调函数
+    function onConnect() {
+        console.log("Connected to MQTT broker");
+        client.subscribe(MQTT_TOPIC);
+    }
+
+    // 当从 MQTT 服务器收到消息时的回调函数
+    function onMessageArrived(message) {
+        console.log("Received message: ", message);
+        console.log("Payload: ", message.payloadString);
+        var data = JSON.parse(message.payloadString);
+        console.log("Parsed data: ", data);
+
+
+        updateExpressionDisplay(data.type,data.file,data.image);
+        // updateExpressionDisplay(data.image);
+    }
+
+
+    // 更新表情显示
+    function updateExpressionDisplay(expression,file,imageData) {
+        var expressionDisplay= document.getElementById("expressionDisplay","filenDisplay","imageDisplay");
+        expressionDisplay.textContent = "当前的表情是: " + expression;
+        // fileDisplay.textContent = "Detected file: " + file;
+    }
+
+    function connect() {
+        client = new Paho.MQTT.Client(MQTT_HOST, Number(MQTT_PORT), "web-client-" + parseInt(Math.random() * 100000, 100000000000000));
+        client.onConnectionLost = onConnectionLost;
+        client.onMessageArrived = onMessageArrived;
+        console.log("MQTT Start to connect...");
+        client.connect({ onSuccess: onConnect });
+    }
+
+    // 连接丢失时的回调函数
+    function onConnectionLost(responseObject) {
+        if (responseObject.errorCode !== 0) {
+            console.log("Connection lost: " + responseObject.errorMessage);
         }
+    }
 
-        // 当从 MQTT 服务器收到消息时的回调函数
-        function onMessageArrived(message) {
-            console.log("Received message: ", message);
-            console.log("Payload: ", message.payloadString);
-            var data = JSON.parse(message.payloadString);
-            console.log("Parsed data: ", data);
-            updateExpressionDisplay(data.type);
-        }
-
-        // 更新表情显示
-        function updateExpressionDisplay(expression) {
-            var expressionDisplay = document.getElementById("expressionDisplay");
-            expressionDisplay.textContent = "老人当前的表情是: " + expression;
-            // expressionDisplay.textContent = expression;
-        }
-
-        // 连接 MQTT 服务器
-        function connect() {
-            client = new Paho.MQTT.Client(MQTT_HOST, Number(MQTT_PORT), "web-client-" + parseInt(Math.random() * 100000, 100000000000000));
-            client.onConnectionLost = onConnectionLost;
-            client.onMessageArrived = onMessageArrived;
-            client.connect({ onSuccess: onConnect });
-        }
-
-        // 连接丢失时的回调函数
-        function onConnectionLost(responseObject) {
-            if (responseObject.errorCode !== 0) {
-                console.log("Connection lost: " + responseObject.errorMessage);
-            }
-        }
-
-        // 页面加载时连接 MQTT 服务器
-        window.onload = connect;
-    </script>
+    // 页面加载时连接 MQTT 服务器
+    window.onload = connect;
+</script>
 
   <script type="text/javascript" charset="utf-8">
 

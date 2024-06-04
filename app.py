@@ -38,6 +38,7 @@ global nerfreal
 global tts_type
 global gspeaker
 
+
 class Postman:
     def __init__(self):
         self.humanchat_ws = None

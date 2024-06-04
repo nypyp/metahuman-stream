@@ -86,6 +86,33 @@
         window.onload = connect;
     </script>
 
+<script>
+  // 替换为你的图片所在文件夹的路径
+  const imageFolder = './input/';
+
+  // 获取文件夹下的所有图片文件
+  fetch(imageFolder)
+      .then(response => response.text())
+      .then(data => {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(data, 'text/html');
+          const images = doc.querySelectorAll('a[href$=".jpg"], a[href$=".png"], a[href$=".gif"]');
+
+          const imageContainer = document.getElementById('image-container');
+          images.forEach(image => {
+              const imageUrl = `${image.getAttribute('href')}`;
+              const img = document.createElement('img');
+              img.src = imageUrl;
+              img.alt = "Detected facial expression"; // 添加 alt 属性
+              img.width = "320"; 
+              imageContainer.appendChild(img);
+          });
+      })
+      .catch(error => {
+          console.error('Error fetching images:', error);
+      });
+</script>
+
 <body class="g-sidenav-show rtl  bg-gray-100">
   <div class="min-height-300 bg-primary position-absolute w-100"></div>
   <aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-end me-4 rotate-caret" id="sidenav-main">
@@ -414,7 +441,9 @@
                   <div class="bg-gradient-primary border-radius-lg min-height-200">
                     <img src="../assets/img/shapes/waves-white.svg" class="position-absolute h-100 top-0 d-md-block d-none" alt="waves">
                     <div class="position-relative pt-5 pb-4">
-                      <img class="max-width-500 w-100 position-relative z-index-2" src="../assets/img/small-img//laoren.jpg">
+                      <div class="image-container" id="image-container">
+                      </div> 
+                      <!-- <img class="max-width-500 w-100 position-relative z-index-2" src="../assets/img/small-img//laoren.jpg"> -->
                     </div>
                   </div>
                 </div>
@@ -452,6 +481,8 @@
                 <div class="chart"> 
                   <!-- <canvas id="chart-bars" class="chart-canvas" height="170px"></canvas> -->
                   <img src="../assets/img/small-img/face-result.gif" width="98%" height="70%"></img>
+                  <!-- <div class="image-container" id="image-container">
+                  </div> -->
                 </div>
               </div>
               <!-- <h6 class="ms-2 mt-4 mb-0"> المستخدمين النشطين </h6> -->
